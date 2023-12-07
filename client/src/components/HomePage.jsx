@@ -32,9 +32,10 @@ export default function HomePage() {
                 </div>
             </Parallax>
             <div className='flex flex-col h-screen items-center w-full bg-[#202020]'>
-                <div className='flex flex-col items-center w-full h-screen'>
-                    <h1 className='text-white text-2xl mt-28 mb-10 underline'>
+                <div className='flex flex-col items-center w-full h-screen text-center'>
+                    <h1 className='text-white text-2xl mt-28 mb-10 '>
                         <b><i>Thoughts</i></b>
+                        <span onClick={()=> navigate('/register')} className='cursor-pointer mx-4 border py-0.5 px-2 text-center '>+</span>
                     </h1>
                     {isLoggedIn && thoughts.length > 0 && thoughts.map(thought => (
                         <div onClick={() => navigate('/thought/'+thought._id)} className='flex flex-col mb-10 text-left gap-2 cursor-pointer border p-8'>

@@ -59,7 +59,7 @@ export default function RegisterThought() {
     })
 
     return (
-        <div className='max-w-2xl min-w-2xl'>
+        <div className='max-w-2xl min-w-2xl mt-14'>
             <form onSubmit={formik.handleSubmit}>
                 <div className='flex flex-row items-center justify-between'>
                     <div>
