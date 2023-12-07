@@ -21,19 +21,16 @@ export default function HomePage() {
     }, [])
 
     return (
-        // <Parallax className='flex flex-col h-full items-center w-full' strength={300} bgImage={bg} >
-        // padding ruined thoughts section
         // TODO: scroll partially
         <div className='flex flex-col h-full items-center w-full scroll-smooth' >
-            <div className='flex flex-col h-screen items-center w-full'>
+            <Parallax className='flex flex-col h-screen items-center w-full' strength={800} bgImage={bg}>
                 <div className='flex flex-col items-center w-full h-full'>
-                    <div className=' w-auto mt-80 '>
+                    <div className=' w-auto h-screen flex flex-col items-left justify-center'>
                         <h1 className='bg-[#202020] px-1 py-1 w-7 text-center text-white text-sm'>Of</h1>
                         <h1 className='bg-[#202020] px-6 py-2 leading-9 text-white text-4xl text-center underline'><b>Mahdi Hadian</b></h1>
                     </div>
-                    {/*    TODO: add a text */}
                 </div>
-            </div>
+            </Parallax>
             <div className='flex flex-col h-screen items-center w-full bg-[#202020]'>
                 <div className='flex flex-col items-center w-full h-screen'>
                     <h1 className='text-white text-2xl mt-28 mb-10 underline'>
