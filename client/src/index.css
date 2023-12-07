@@ -9,3 +9,11 @@ input[type="text"],input[type="password"],input[type="email"],textarea,input[typ
 textarea{
     height: 140px;
 }
+
+.bg{
+    background: url("../src/images/bg.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
