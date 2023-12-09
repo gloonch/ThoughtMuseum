@@ -6,6 +6,7 @@ const ThoughtSchema = new mongoose.Schema({
         ref: 'User'
     },
     title: {type: String, required: true},
+    color: {type: String, required: true},
     description: {type: String, required: true},
     created_at: {type: Date, default: Date.now},
     photos: {type: [String], required: false},

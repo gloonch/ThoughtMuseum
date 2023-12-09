@@ -73,12 +73,12 @@ app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
 
 app.post('/thought', async (req, res) => {
     const {
-        user, title, description, photos, tags
+        user, title, color, description, photos, tags
     } = req.body;
 
     if (user && title && description) {
         const postDoc = await Post.create({
-            user: user, title, photos, description, tags
+            user: user, title, color, photos, description, tags
         });
         res.status(201).json({ _id: postDoc._id});
     }

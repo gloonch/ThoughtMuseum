@@ -18,7 +18,7 @@ export default function ThoughtGallery({thought, col}) {
                         </button>
                     </div>
                     {thought?.photos?.length > 0 && thought.photos.map(photo => (
-                        <div>
+                        <div key={photo}>
                             <img className='w-full' src={'http://localhost:4000/uploads/' + photo} alt='' />
                         </div>
                     ))}
@@ -31,7 +31,7 @@ export default function ThoughtGallery({thought, col}) {
         <div className='relative'>
             <div className='grid gap-0.5 grid-cols-[1fr_1fr_1fr] overflow-hidden'>
                 {thought.photos  && thought.photos.map(photo => (
-                    <div className={col}>
+                    <div key={photo} className={col}>
                         <img onClick={()=> setShowAllPhotos(true)} className='cursor-pointer aspect-square object-cover' src={'http://localhost:4000/uploads/' + photo} alt={''} />
                     </div>
                 ))}

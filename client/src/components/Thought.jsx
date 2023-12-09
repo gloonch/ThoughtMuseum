@@ -1,23 +1,25 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {createElement, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import ThoughtGallery from "./ThoughtGallery";
+import 'react-quill/dist/quill.bubble.css'
+import ReactQuill from "react-quill";
 
 export default function Thought() {
     const {id} = useParams();
     const navigate = useNavigate();
     const [thought, setThought] = useState(null);
-    const [titleColor, setTitleColor] = useState('red') // TODO: put color to the Though model Thought.js
     const [isTitleClicked, setIsTitleClicked] = useState(false);
     const [cols, setCols] = useState('');
     const [scrollingSpeed, setScrollingSpeed] = useState(0);
     const [countdown, setCountdown] = useState(20);
+    const [description, setDescription] = useState('');
 
     useEffect(()=>{
         axios.get('thought/' + id)
             .then(success => {
-                console.log(success.data)
                 setThought(success.data);
+                setDescription(success.data.description)
             })
             .catch(err => {
                 return alert("Error happened while retrieving thought : " + err.message)
@@ -29,9 +31,16 @@ export default function Thought() {
             {thought && (
                 <div className='flex flex-row justify-around items-start'>
                     <div className='flex flex-col mt-10 items-start pr-3 w-full '>
-                        <h1 onClick={()=> {setIsTitleClicked(!isTitleClicked)}} className={`font-oswald cursor-pointer text-white text-8xl mb-8 line-clamp-4 -mr-96 bg-`+ titleColor +`-600 tracking-tight opacity-70 z-10`}><b>{thought.title}</b></h1>
+                        <h1 onClick={()=> {setIsTitleClicked(!isTitleClicked)}} className={'font-oswald cursor-pointer text-white text-8xl mb-8 line-clamp-4 -mr-96 tracking-tight opacity-70 z-10 font-bold bg-yellow-600'}>{thought.title}</h1>
                         {!isTitleClicked && (
-                            <h1 className='text-gray-700 font-playfair'>{thought.description}</h1>
+
+                            <ReactQuill className='text-gray-700 text-xl font-playfair'
+                                value={thought.description}
+                                readOnly={true}
+                                theme={"bubble"}
+                            />
+                            // <div className=' font-playfair' dangerouslySetInnerHTML={{ __html: description }}/>
+
                         )}
                         {isTitleClicked && (
                             <div className='w-full border bg-[#202020] p-8'>
