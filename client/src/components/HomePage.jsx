@@ -38,17 +38,12 @@ export default function HomePage() {
                         <span onClick={()=> navigate('/register')} className='cursor-pointer mx-4 border py-0.5 px-2 text-center '>+</span>
                     </h1>
                     {isLoggedIn && thoughts.length > 0 && thoughts.map(thought => (
-                        <div onClick={() => navigate('/thought/'+thought._id)} className='flex flex-col mb-10 text-left gap-2 cursor-pointer border p-8'>
-                            <div className='flex flex-row justify-between items-center'>
-                                <h1 className='text-white text-2xl truncate'><b>{thought.title}</b></h1>
-                                <h1 className='text-white text-md'>{thought.created_at.toString()
-                                    .split('T')[0].replace('-', '/').replace('-', '/')}
-                                </h1>
-                            </div>
-                            <h1 className='text-gray-300 w-80 text-sm line-clamp-3 max-h-20 '>{thought.description}</h1>
-
-                            {/*TODO: make it random objects on bottom border left or right*/}
-                            {/*<hr className='' />*/}
+                        <div onClick={() => navigate('/thought/'+thought._id)} className='flex flex-col items-center mb-10 text-left gap-2 cursor-pointer border p-8 w-3/5'>
+                            <h1 className='text-white text-3xl truncate'><b>{thought.title}</b></h1>
+                            <h1 className='text-white text-md'>{thought.created_at.toString()
+                                .split('T')[0].replace('-', '/').replace('-', '/')}
+                            </h1>
+                            <div className=' text-gray-300 w-4/5 text-md line-clamp-3  ' dangerouslySetInnerHTML={{ __html: thought.description }}/>
                         </div>
                     ))}
                 </div>
