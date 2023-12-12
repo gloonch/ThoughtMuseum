@@ -93,7 +93,7 @@ export default function Me() {
                 </div>
                 <PhotosUploader addedPhotos={photo} onChange={setPhoto} />
                 <div className='flex flex-col items-center mt-8'>
-                    <button type="submit" className='w-4/5 bg-amber-400 py-2 px-8 my-4 text-black'><b>Update</b></button>
+                    <button type="submit" className='w-4/5 py-2 px-8 my-4'><b>Update</b></button>
                 </div>
             </form>
         </div>

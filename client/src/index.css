@@ -10,6 +10,10 @@ textarea{
     height: 140px;
 }
 
+button, button[type="submit"]{
+    @apply bg-black text-white hover:bg-amber-400 hover:text-black duration-300
+}
+
 .bg{
     background: url("../src/images/bg.jpeg");
     background-repeat: no-repeat;

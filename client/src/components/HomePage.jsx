@@ -39,7 +39,7 @@ export default function HomePage() {
                 <div className='flex flex-col items-center w-full h-full'>
                     <div className=' w-auto h-screen flex flex-col items-left justify-center'>
                         <h1 className='bg-[#202020] px-1 py-1 w-7 text-center text-white text-sm'>Of</h1>
-                        <h1 onClick={() => navigate('/me/' + user._id)} className='cursor-pointer bg-[#202020] px-6 py-2 leading-9 text-white text-4xl text-center underline'><b>{user?.name}</b></h1>
+                        <h1 onClick={() => navigate('/me/' + user._id)} className='cursor-pointer bg-[#202020] px-6 py-2 leading-9 text-white hover:text-amber-400 duration-500 text-4xl text-center underline'><b>{user?.name}</b></h1>
                     </div>
                 </div>
             </Parallax>
@@ -47,7 +47,7 @@ export default function HomePage() {
                 <div className='flex flex-col items-center w-full h-screen text-center'>
                     <h1 className='text-white text-2xl mt-28 mb-10 '>
                         <b><i>Thoughts</i></b>
-                        <span onClick={()=> navigate('/register')} className='cursor-pointer mx-4 border py-0.5 px-2 text-center '>+</span>
+                        <span onClick={()=> navigate('/register')} className='cursor-pointer mx-4 border py-0.5 px-2 text-center hover:text-amber-400 hover:border-amber-400 duration-500'>+</span>
                     </h1>
                     {isLoggedIn && thoughts.length > 0 && thoughts.map(thought => (
                         <div onClick={() => navigate('/thought/'+thought._id)} className='flex flex-col items-center mb-10 text-left gap-2 cursor-pointer border p-8 w-3/5'>

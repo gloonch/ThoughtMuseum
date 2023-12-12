@@ -140,7 +140,7 @@ export default function RegisterThought() {
                 <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
                 <div className='flex flex-col items-center mt-8'>
-                    <button className='w-4/5 bg-amber-400 py-2 px-8 my-4 text-black'><b>Publish Post</b></button>
+                    <button className='w-4/5 py-2 px-8 my-4'><b>Publish Post</b></button>
                 </div>
             </form>
         </div>
