@@ -43,9 +43,29 @@ app.post('/user', async (req, res) => {
 
 });
 
-app.get('/user', async (req, res) => {
-    res.json(await User.find())
+app.get('/user/:id', async (req, res) => {
+    const {id} = req.params;
+    res.json(await User.findById(id))
 });
+
+app.put('/user/:id', async (req, res) => {
+    const {id} = req.params;
+    const {background, name} = req.body;
+
+    try {
+
+        const userDoc = await User.findById(id);
+        userDoc.set({background: background, name: name});
+        await userDoc.save();
+
+        res.json(userDoc)
+    } catch (e) {
+        res.status(422).json(e);
+    }
+
+});
+
+
 
 app.post('/upload-by-link', async (req, res) => {
     const {link} = req.body;

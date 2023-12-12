@@ -5,6 +5,7 @@ import RegisterThought from "./components/RegisterThought";
 import Thought from "./components/Thought";
 import HomePage from "./components/HomePage";
 import Navbar from "./components/Navbar";
+import Me from "./components/Me";
 
 axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
@@ -18,6 +19,7 @@ function App() {
                   <Route index element={<HomePage />} />
                   <Route path={'/register'} element={<RegisterThought />} />
                   <Route path={'/thought/:id'} element={<Thought />} />
+                  <Route path={'/me/:id'} element={<Me />} />
               </Routes>
           </BrowserRouter>
       </div>
