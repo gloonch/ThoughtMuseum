@@ -14,22 +14,37 @@ export default function Thought() {
     const [scrollingSpeed, setScrollingSpeed] = useState(0);
     const [countdown, setCountdown] = useState(20);
     const [description, setDescription] = useState('');
+    const [type, setType] = useState("Article");
+    const [currentState, setCurrentState] = useState(0);
+    const [duration, setDuration] = useState(10000); // first one should be an intro or waiting for title
 
     useEffect(()=>{
         axios.get('thought/' + id)
             .then(success => {
                 setThought(success.data);
                 setDescription(success.data.description)
+                setType(success.data.type)
             })
             .catch(err => {
                 return alert("Error happened while retrieving thought : " + err.message)
             })
     }, [])
 
+    if (type === 'Cinematic') {
+        setTimeout(() => {
+            if (currentState === thought.photos.length) {
+                setCurrentState(0)
+            }
+            else {
+                setCurrentState(currentState + 1)
+            }
+        }, duration)
+    }
+
     return (
-        <div className='mt-6 p-6 w-full'>
-            {thought && (
-                <div className='flex flex-row justify-around items-start'>
+        <div className=' w-full'>
+            {thought && thought.type === 'Article' && (
+                <div className='flex flex-row justify-around items-start mt-6 p-6'>
                     <div className='flex flex-col mt-10 items-start pr-3 w-full '>
                         <h1 onClick={()=> {setIsTitleClicked(!isTitleClicked)}} className={'font-oswald cursor-pointer text-white text-8xl mb-8 line-clamp-4 -mr-96 tracking-tight opacity-70 z-10 font-bold bg-yellow-600'}>{thought.title}</h1>
                         {!isTitleClicked && (
@@ -120,6 +135,27 @@ export default function Thought() {
                     </div>
                 </div>
             )}
+
+            {thought && thought.type === 'Cinematic' && (
+                <div className='w-full h-screen'>
+                    <div className='overlay absolute top-0 left-0 w-full h-full bg-black opacity-20 '>
+                    </div>
+                        <video
+                            autoPlay
+                            onCanPlay={(e) => setDuration(Math.round(e.target.duration, 1000 ) * 1000)}
+                            className='w-full h-screen object-cover'
+                            src={'http://localhost:4000/uploads/' + thought.photos[currentState]}
+                        />
+                    <div className='content absolute w-full h-screen top-0 flex flex-col gap-2 justify-center items-center text-white text-center' >
+                        <h1 className='text-6xl'>{thought.title}</h1>
+                        {/*<p className='text-xl line-clamp-1 w-80 h-8 '>{thought.description}</p>*/}
+                        <p className='text-xl  w-808 '>{thought.description}</p>
+                        {/*<p>{currentState}</p>*/}
+                        {/*<p>{duration}</p>*/}
+                    </div>
+                </div>
+            )}
+
         </div>
     )
 }

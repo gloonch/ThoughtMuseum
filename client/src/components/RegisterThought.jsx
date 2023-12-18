@@ -1,5 +1,5 @@
 import PhotosUploader from "./PhotosUploader";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useFormik} from "formik";
 import * as Yup from 'yup';
 import {useNavigate} from "react-router-dom";
@@ -13,6 +13,7 @@ export default function RegisterThought() {
     const [addedPhotos, setAddedPhotos] = useState([]);
     const navigate = useNavigate();
     const [descriptionValue, setDescriptionValue] = useState('');
+    const type = ['Cinematic', 'Article'];
 
     function inputHeader(text) {
         return (
@@ -35,9 +36,15 @@ export default function RegisterThought() {
         )
     }
 
+    // TODO: description value should be reset after changing type
+    // useEffect(()=>{
+    //     setDescriptionValue('')
+    // }, [type])
+
     const formik = useFormik({
         initialValues: {
             title: '',
+            type: type[0],
             color: '',
             description: '',
             photos: [],
@@ -46,13 +53,12 @@ export default function RegisterThought() {
         validationSchema: Yup.object({
             title: Yup.string().required('Title is required'),
             color: Yup.string().required('Color is required'),
-            // description: Yup.string().required('Description is required'),
-            // TODO: validation for arrays Photos and Tags
         }),
         onSubmit: async (values) => {
             await axios.post('/thought', {
                 user: '656f34178ad764b984a97719', // TODO: change this to user id
                 title: values.title,
+                type: values.type,
                 color: values.color,
                 description: descriptionValue,
                 photos: addedPhotos,
@@ -88,6 +94,27 @@ export default function RegisterThought() {
 
                 <div className='flex flex-row items-center justify-between'>
                     <div>
+                        {preInput('Type', 'Describe your thought with a type')}
+                    </div>
+                    <label
+                        className={`mt-auto block font-latoBold text-sm ${formik.errors.type ? 'text-red-500' : ""}`}
+                        htmlFor='type'>
+                        {formik.touched.type && formik.errors.type ? formik.errors.type : ""}
+                    </label>
+                </div>
+                <select
+                    value={formik.values.type}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    name='type'
+                >
+                    {type.map(t => {
+                        return <option value={t}>{t}</option>
+                    })}
+                </select>
+
+                <div className='flex flex-row items-center justify-between'>
+                    <div>
                         {preInput('Color', 'Categorize your thoughts by picking colors')}
                     </div>
                     <label
@@ -104,29 +131,52 @@ export default function RegisterThought() {
                     type='text'
                     placeholder='Color' />
 
-                <div className='flex flex-row items-center justify-between'>
-                    <div>
-                        {preInput('Description', 'This is the body of post and it will describe the subject')}
-                    </div>
-                    <label
-                        className={`mt-auto block font-latoBold text-sm ${formik.errors.description ? 'text-red-500' : ""}`}
-                        htmlFor='description'>
-                        {formik.touched.description && formik.errors.description ? formik.errors.description : ""}
-                    </label>
-                </div>
-                <ReactQuill
-                    className='max-w-xl h-56 max-h-80 mb-10'
-                    value={descriptionValue}
-                    onChange={(value)=> setDescriptionValue(value)}
-                    name='description'
-                    modules={{
-                        toolbar: [
-                            [{ header: [1, 2, false] }],
-                            ['bold', 'italic', 'underline'],
-                        ]
-                    }}
-                />
 
+                { formik.values.type === type[1] && (
+                    <>
+                        <div className='flex flex-row items-center justify-between'>
+                            <div>
+                                {preInput('Description', 'This is the body of post and it will describe the subject')}
+                            </div>
+                            <label
+                                className={`mt-auto block font-latoBold text-sm ${formik.errors.description ? 'text-red-500' : ""}`}
+                                htmlFor='description'>
+                                {formik.touched.description && formik.errors.description ? formik.errors.description : ""}
+                            </label>
+                        </div>
+                        <ReactQuill
+                            className='max-w-xl h-56 max-h-80 mb-10'
+                            value={descriptionValue}
+                            onChange={(value)=> setDescriptionValue(value)}
+                            name='description'
+                            modules={{
+                                toolbar: [
+                                    [{ header: [1, 2, false] }],
+                                    ['bold', 'italic', 'underline'],
+                                ]
+                            }}
+                        />
+                    </>
+                )}
+                { formik.values.type === type[0] && (
+                    <>
+                        <div className='flex flex-row items-center justify-between'>
+                            <div>
+                                {preInput('Description', 'This is the body of post and it will describe the subject')}
+                            </div>
+                            <label
+                                className={`mt-auto block font-latoBold text-sm ${formik.errors.description ? 'text-red-500' : ""}`}
+                                htmlFor='description'>
+                                {formik.touched.description && formik.errors.description ? formik.errors.description : ""}
+                            </label>
+                        </div>
+                        <textarea
+                            value={descriptionValue}
+                            onChange={(e)=> setDescriptionValue(e.target.value)}
+                            name='description'
+                        />
+                    </>
+                )}
                 <div className='flex flex-row items-center justify-between'>
                     <div>
                         {preInput('Photos', 'More is better')}
@@ -140,7 +190,7 @@ export default function RegisterThought() {
                 <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
                 <div className='flex flex-col items-center mt-8'>
-                    <button className='w-4/5 py-2 px-8 my-4'><b>Publish Post</b></button>
+                    <button type='submit' className='w-4/5 py-2 px-8 my-4'><b>Publish Post</b></button>
                 </div>
             </form>
         </div>

@@ -54,6 +54,7 @@ export default function PhotosUploader({addedPhotos, onChange}) {
             <div className='mt-2 grid items-center grid-cols-3 gap-2'>
                 {addedPhotos.length > 0 && addedPhotos.map(link => (
                     <div className='h-32 w-48 flex relative' key={link}>
+                        {/*TODO: decide between image or video*/}
                         <img className=' w-full object-cover' src={'http://localhost:4000/uploads/' + link} alt='image' />
                         <button onClick={(e) => removePhoto(e, link)} className=' cursor-pointer absolute bottom-1 right-1 text-white bg-black bg-opacity-70  py-2 px-3 m-2'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
