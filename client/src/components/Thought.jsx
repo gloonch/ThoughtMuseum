@@ -1,9 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {createElement, useEffect, useRef, useState} from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import ThoughtGallery from "./ThoughtGallery";
 import 'react-quill/dist/quill.bubble.css'
 import ReactQuill from "react-quill";
+import {motion} from "framer-motion";
 
 export default function Thought() {
     const {id} = useParams();
@@ -41,8 +42,26 @@ export default function Thought() {
         }, duration)
     }
 
+    function nextMedia(index) {
+        return (
+                <motion.video
+                    initial={{opacity: 0}}
+                    animate={{opacity: [0, 1.01]}}
+                    exit={{opacity: 0}}
+                    key={index}
+                    transition={{duration: 2}}
+                    onCanPlay={(e) => {
+                        setDuration(Math.round(e.target.duration, 1000 ) * 1000);
+                    }}
+                    className='w-full h-screen object-cover'
+                    src={'http://localhost:4000/uploads/' + thought.photos[index]}
+                    autoPlay
+                />
+        )
+    }
+
     return (
-        <div className=' w-full'>
+        <div className=' w-full bg-black'>
             {thought && thought.type === 'Article' && (
                 <div className='flex flex-row justify-around items-start mt-6 p-6'>
                     <div className='flex flex-col mt-10 items-start pr-3 w-full '>
@@ -138,20 +157,14 @@ export default function Thought() {
 
             {thought && thought.type === 'Cinematic' && (
                 <div className='w-full h-screen'>
-                    <div className='overlay absolute top-0 left-0 w-full h-full bg-black opacity-20 '>
-                    </div>
-                        <video
-                            autoPlay
-                            onCanPlay={(e) => setDuration(Math.round(e.target.duration, 1000 ) * 1000)}
-                            className='w-full h-screen object-cover'
-                            src={'http://localhost:4000/uploads/' + thought.photos[currentState]}
-                        />
+                    {/*TODO: opacity applies after a few seconds and that's a problem */}
+                    {/*<div className='overlay absolute top-0 left-0 w-full h-full bg-black opacity-20 '>*/}
+                    {/*</div>*/}
+
+                    {nextMedia(currentState)}
                     <div className='content absolute w-full h-screen top-0 flex flex-col gap-2 justify-center items-center text-white text-center' >
                         <h1 className='text-6xl'>{thought.title}</h1>
-                        {/*<p className='text-xl line-clamp-1 w-80 h-8 '>{thought.description}</p>*/}
                         <p className='text-xl  w-808 '>{thought.description}</p>
-                        {/*<p>{currentState}</p>*/}
-                        {/*<p>{duration}</p>*/}
                     </div>
                 </div>
             )}
