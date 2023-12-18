@@ -43,21 +43,47 @@ export default function Thought() {
     }
 
     function nextMedia(index) {
-        return (
-                <motion.video
-                    initial={{opacity: 0}}
-                    animate={{opacity: [0, 1.01]}}
-                    exit={{opacity: 0}}
-                    key={index}
-                    transition={{duration: 2}}
-                    onCanPlay={(e) => {
-                        setDuration(Math.round(e.target.duration, 1000 ) * 1000);
-                    }}
-                    className='w-full h-screen object-cover'
-                    src={'http://localhost:4000/uploads/' + thought.photos[index]}
-                    autoPlay
-                />
-        )
+        let ext;
+        if (thought.photos[index])
+            ext = thought.photos[index].split('.')[1];
+
+        if (ext === 'jpeg' || ext === 'png' || ext === 'jpg') {
+            return (
+                <div key={index}>
+                    {/*TODO: put smooth zoom effect on images*/}
+                    <motion.img
+                        initial={{opacity: 0}}
+                        animate={{opacity: [0, 1.01]}}
+                        exit={{opacity: 0}}
+                        onLoad={() => {
+                            setDuration(5000);
+                        }}
+                        className='w-full'
+                        src={'http://localhost:4000/uploads/' + thought.photos[index]}
+                        alt='' />
+                </div>
+            )
+        }
+
+        if (ext === 'mp4' || ext === 'MOV') {
+            return (
+                <div key={index}>
+                    <motion.video
+                        initial={{opacity: 0}}
+                        animate={{opacity: [0, 1.01]}}
+                        exit={{opacity: 0}}
+                        key={index}
+                        transition={{duration: 2}}
+                        onCanPlay={(e) => {
+                            setDuration(Math.round(e.target.duration, 1000 ) * 1000);
+                        }}
+                        className='w-full h-screen object-cover'
+                        src={'http://localhost:4000/uploads/' + thought.photos[index]}
+                        autoPlay
+                    />
+                </div>
+            )
+        }
     }
 
     return (
@@ -156,7 +182,7 @@ export default function Thought() {
             )}
 
             {thought && thought.type === 'Cinematic' && (
-                <div className='w-full h-screen'>
+                <div className='w-full h-screen' key={currentState}>
                     {/*TODO: opacity applies after a few seconds and that's a problem */}
                     {/*<div className='overlay absolute top-0 left-0 w-full h-full bg-black opacity-20 '>*/}
                     {/*</div>*/}
