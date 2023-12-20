@@ -15,6 +15,7 @@ export default function Thought() {
     const [scrollingSpeed, setScrollingSpeed] = useState(0);
     const [countdown, setCountdown] = useState(20);
     const [description, setDescription] = useState('');
+    const [sepDescription, setSepDescription] = useState('');
     const [type, setType] = useState("Article");
     const [currentState, setCurrentState] = useState(0);
     const [duration, setDuration] = useState(10000); // first one should be an intro or waiting for title
@@ -31,6 +32,17 @@ export default function Thought() {
             })
     }, [])
 
+    useEffect(()=>{
+        let separatedText = chunkify(description, 62)
+        let i = 0;
+        const interval = setInterval(() => {
+            setSepDescription(separatedText[i]);
+            i += 1;
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [description])
+
     if (type === 'Cinematic') {
         setTimeout(() => {
             if (currentState === thought.photos.length) {
@@ -42,15 +54,35 @@ export default function Thought() {
         }, duration)
     }
 
+    function chunkify(str, size) {
+        var words = str.split(/\s+/);
+        var chunks = [];
+        var possiblePages = Math.ceil(str.length / size).toString();
+        words.reduce((chuckStr, word, i, a) => {
+            var pageIndex = ' ' + (chunks.length + 1) + '/';
+            if ((chuckStr.length + word.length + pageIndex.length + possiblePages.length) + 1 > size) {
+                chunks.push(chuckStr);
+                chuckStr = word;
+            } else if (i === a.length - 1) {
+                chunks.push(chuckStr + " " + word );
+            }else {
+                chuckStr += " " + word;
+            }
+            return chuckStr
+        }, '');
+        return chunks.map(chunk => chunk )
+    }
+
     function nextMedia(index) {
         let ext;
         if (thought.photos[index])
-            ext = thought.photos[index].split('.')[1];
+            ext = thought.photos[index].split('.')[1].toLowerCase();
 
         if (ext === 'jpeg' || ext === 'png' || ext === 'jpg') {
             return (
                 <div key={index}>
                     {/*TODO: put smooth zoom effect on images*/}
+                    {/*TODO: image duration should be read from config file to hold a global value*/}
                     <motion.img
                         initial={{opacity: 0}}
                         animate={{opacity: [0, 1.01]}}
@@ -58,14 +90,14 @@ export default function Thought() {
                         onLoad={() => {
                             setDuration(5000);
                         }}
-                        className='w-full'
+                        className='w-full h-screen object-cover'
                         src={'http://localhost:4000/uploads/' + thought.photos[index]}
                         alt='' />
                 </div>
             )
         }
 
-        if (ext === 'mp4' || ext === 'MOV') {
+        if (ext === 'mp4' || ext === 'mov') {
             return (
                 <div key={index}>
                     <motion.video
@@ -189,8 +221,9 @@ export default function Thought() {
 
                     {nextMedia(currentState)}
                     <div className='content absolute w-full h-screen top-0 flex flex-col gap-2 justify-center items-center text-white text-center' >
-                        <h1 className='text-6xl'>{thought.title}</h1>
-                        <p className='text-xl  w-808 '>{thought.description}</p>
+                        {/*TODO: replace onlick on title with overlay to show the config box*/}
+                        {/*<h1 className='text-6xl'>{thought.title}</h1>*/}
+                        <p className='text-2xl w-full line-clamp-1 '>{sepDescription}</p>
                     </div>
                 </div>
             )}
