@@ -1,0 +1,29 @@
+version: '3'
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - './volumes/mongo:/data/db'
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports: 
+      - "4000:4000"
+    depends_on:
+      - mongo
+    links:
+      - mongo
