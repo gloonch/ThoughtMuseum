@@ -14,6 +14,7 @@ export default function RegisterThought() {
     const navigate = useNavigate();
     const [descriptionValue, setDescriptionValue] = useState('');
     const type = ['Cinematic', 'Article'];
+    const [totalDuration, setTotalDuration] = useState(0);
 
     function inputHeader(text) {
         return (
@@ -45,24 +46,20 @@ export default function RegisterThought() {
         initialValues: {
             title: '',
             type: type[0],
-            color: '',
             description: '',
             photos: [],
-            tags: []
         },
         validationSchema: Yup.object({
             title: Yup.string().required('Title is required'),
-            color: Yup.string().required('Color is required'),
         }),
         onSubmit: async (values) => {
             await axios.post('/thought', {
                 user: '656f34178ad764b984a97719', // TODO: change this to user id
                 title: values.title,
                 type: values.type,
-                color: values.color,
                 description: descriptionValue,
                 photos: addedPhotos,
-                tags: []
+                duration: totalDuration
             }).then(success => {
                 navigate('/thought/' + success.data._id)
             }).catch(err => {
@@ -112,24 +109,6 @@ export default function RegisterThought() {
                         return <option value={t}>{t}</option>
                     })}
                 </select>
-
-                <div className='flex flex-row items-center justify-between'>
-                    <div>
-                        {preInput('Color', 'Categorize your thoughts by picking colors')}
-                    </div>
-                    <label
-                        className={`mt-auto block font-latoBold text-sm ${formik.errors.color ? 'text-red-500' : ""}`}
-                        htmlFor='color'>
-                        {formik.touched.color && formik.errors.color ? formik.errors.color : ""}
-                    </label>
-                </div>
-                <input
-                    value={formik.values.color}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name='color'
-                    type='text'
-                    placeholder='Color' />
 
 
                 { formik.values.type === type[1] && (
@@ -187,7 +166,7 @@ export default function RegisterThought() {
                         {formik.touched.photos && formik.errors.photos ? formik.errors.photos : ""}
                     </label>
                 </div>
-                <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
+                <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} setTotalDuration={setTotalDuration} />
 
                 <div className='flex flex-col items-center mt-8'>
                     <button type='submit' className='w-4/5 py-2 px-8 my-4'><b>Publish Post</b></button>
